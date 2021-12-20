@@ -32,10 +32,6 @@ class PageTests(TestCase):
                 author=cls.author,
                 group=cls.group,
                 id=post)
-        cls.post_test = Post.objects.create(
-            text='Тестовая-Тестовая запись',
-            author=cls.author_test,
-            group=cls.group_test)
 
     def setUp(self) -> None:
         self.guest_client = Client()
@@ -62,7 +58,6 @@ class PageTests(TestCase):
                 response = self.author_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
 
-    # Проверка словаря контекста главной страницы (в нём передаётся форма)
     def test_post_create_show_correct_context(self):
         """Шаблон post_create сформирован с правильным полями."""
         response = self.authorized_client.get(reverse('posts:post_create'))
@@ -144,19 +139,21 @@ class PageTests(TestCase):
             self.assertEqual(len(response.context['page_obj']), 10)
 
     def test_second_page_contains_three_records(self):
-        """Проверка паджинатора: на второй странице должно быть 2 поста."""
+        """Проверка паджинатора: на второй странице должeн быть 1 пост."""
         response = self.authorized_client.get(reverse(
             'posts:index') + '?page=2')
-        self.assertEqual(len(response.context['page_obj']), 2)
+        self.assertEqual(len(response.context['page_obj']), 1)
 
     def test_group_page_show_incorrect_context(self):
-        """Проверка, что пост не попал в группу,
-        для которой не был предназначен."""
-        response = (self.authorized_client.
-                    get(reverse('posts:group_list',
-                                kwargs={'slug': 'test-slug-test'})))
-        self.assertEqual(response.context['group'].title, 'Ошибочная группа')
-        self.assertEqual(response.context['group'].slug, 'test-slug-test')
-        first_object = response.context['posts'][0]
-        self.assertNotEqual(first_object.text, 'Тестовая запись')
-        self.assertNotEqual(first_object.author.username, 'auth')
+        """Отображение на страницах с переданной группой."""
+        url_pages = (
+            reverse('posts:index'),
+            reverse('posts:group_list',
+                    kwargs={'slug': self.group.slug}),
+            reverse('posts:profile', kwargs={'username': 'auth'}))
+        for value in url_pages:
+            with self.subTest(value=value):
+                response = self.authorized_client.get(value)
+                first_object = response.context['page_obj'][0]
+                post_group_0 = first_object.group.title
+                self.assertEqual(post_group_0, self.group.title)
