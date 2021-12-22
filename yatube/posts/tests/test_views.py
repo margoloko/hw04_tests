@@ -48,10 +48,11 @@ class PostPaginatorTests(TestCase):
         """Тестирование пагинатора"""
         templates = [INDEX_URL, GROUP_LIST_URL, PROFILE_URL]
         for template in templates:
-            response = self.authorized_client.get(template)
-            self.assertEqual(len(response.context['page_obj']), 10)
-            response_two = self.authorized_client.get(template + '?page=2')
-            self.assertEqual(len(response_two.context['page_obj']), 2)
+            with self.subTest(template=template):
+                response = self.authorized_client.get(template)
+                self.assertEqual(len(response.context['page_obj']), 10)
+                response_two = self.authorized_client.get(template + '?page=2')
+                self.assertEqual(len(response_two.context['page_obj']), 2)
 
 
 class PageTests(TestCase):

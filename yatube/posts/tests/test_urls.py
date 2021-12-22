@@ -24,7 +24,7 @@ class StaticURLTests(TestCase):
             POST_DETAIL,
             INDEX,
             GROUP_LIST]
-        cls.auth_templates_url = ['/create/', ]
+        cls.auth_templates_url = [POST_CREATE, ]
         cls.author = User.objects.create_user(username='auth')
         cls.author_client = Client()
         cls.author_client.force_login(cls.author)
