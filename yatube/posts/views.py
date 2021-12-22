@@ -45,6 +45,7 @@ def profile(request: HttpRequest, username: str) -> HttpResponse:
     post_count = posts.count()
     page_obj = paginator(request, author_post)
     context = {'post_count': post_count,
+               'author': author,
                'page_obj': page_obj, }
     return render(request, template, context)
 

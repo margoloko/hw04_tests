@@ -7,13 +7,13 @@ class PostForm(forms.ModelForm):
     """Форма для создания поста."""
     class Meta:
         model = Post
-        fields = ('text', 'group', 'image')
+        fields = ('text', 'group')
         labels = {'text': 'Текст',
                   'group': 'Группа',
-                  'image': 'Картинка'}
+                  }
         help_texts = {'text': 'Введите текст',
                       'group': 'выберете из существующих',
-                      'image': 'Загрузите картинку'}
+                      }
 
 
 # class CommentForm(forms.ModelForm):
