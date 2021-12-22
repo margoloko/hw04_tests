@@ -44,7 +44,7 @@ class PostFormTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         # Проверяем, сработал ли редирект
         self.assertRedirects(response, reverse('posts:profile', kwargs={
-            'username': 'NoName'}))        
+            'username': 'NoName'}))
         # Проверяем, увеличилось ли число постов
         self.assertEqual(Post.objects.count(), post_count + 1)
         self.assertTrue(Post.objects.filter(
@@ -67,10 +67,10 @@ class PostFormTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         # Проверяем, что произошло изменение поста
         self.assertTrue(Post.objects.filter(
-                        text='Измененный текст',                       
+                        text='Измененный текст',
                         group=PostFormTests.group.pk).exists())
         # Проверяем, сработал ли редирект
         self.assertRedirects(response, reverse('posts:post_detail',
                              kwargs={'post_id': PostFormTests.post.pk}))
         # Проверяем, число постов осталось прежним
-        self.assertEqual(Post.objects.count(), post_count)        
+        self.assertEqual(Post.objects.count(), post_count)

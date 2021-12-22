@@ -50,17 +50,17 @@ class Post(models.Model):
         verbose_name_plural = 'Посты'
 
 
-class Comment(models.Model):
-    """ Comment ."""
+# class Comment(models.Model):
+#    """ Comment ."""
 
-    post = models.ForeignKey(Post,
-                             on_delete=models.CASCADE,
-                             related_name='comments')
-    author = models.ForeignKey(User,
-                               on_delete=models.CASCADE,
-                               verbose_name='Автор',
-                               related_name='comments')
-    text = models.TextField('Текст комментария',
-                            help_text='Напишите комментарий')
-    created = models.DateTimeField('Дата публикации комментария',
-                                   auto_now_add=True)
+#    post = models.ForeignKey(Post,
+#                             on_delete=models.CASCADE,
+#                             related_name='comments')
+#    author = models.ForeignKey(User,
+#                               on_delete=models.CASCADE,
+#                               verbose_name='Автор',
+#                               related_name='comments')
+#    text = models.TextField('Текст комментария',
+#                            help_text='Напишите комментарий')
+#    created = models.DateTimeField('Дата публикации комментария',
+#                                   auto_now_add=True)

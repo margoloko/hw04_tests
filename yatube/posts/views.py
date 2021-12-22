@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 
-from .forms import CommentForm, PostForm
+from .forms import PostForm
 from .models import Post, Group, User
 
 
@@ -31,7 +31,7 @@ def group_posts(request: HttpRequest, slug: str) -> HttpResponse:
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.all()
     page_obj = paginator(request, posts)
-    context = {'group': group,               
+    context = {'group': group,
                'page_obj': page_obj, }
     return render(request, template, context)
 
@@ -44,8 +44,7 @@ def profile(request: HttpRequest, username: str) -> HttpResponse:
     posts = Post.objects.filter(author=author)
     post_count = posts.count()
     page_obj = paginator(request, author_post)
-    context = {'author': author,               
-               'post_count': post_count,
+    context = {'post_count': post_count,
                'page_obj': page_obj, }
     return render(request, template, context)
 
@@ -69,8 +68,8 @@ def post_create(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         post_author = Post(author=request.user)
         form = PostForm(request.POST or None,
-               files=request.FILES or None,
-               instance=post_author)
+                        files=request.FILES or None,
+                        instance=post_author)
         if form.is_valid():
             form.cleaned_data['text']
             form.cleaned_data['group']
@@ -88,8 +87,8 @@ def post_edit(request: HttpRequest, post_id: int) -> HttpResponse:
         return redirect('posts:post_detail', post_id=post_id)
     is_edit = True
     form = PostForm(request.POST or None,
-                    files=request.FILES or None, 
-                    instance=post)        
+                    files=request.FILES or None,
+                    instance=post)
     if form.is_valid():
         form.save()
         return redirect('posts:post_detail', post_id=post_id)
@@ -99,12 +98,8 @@ def post_edit(request: HttpRequest, post_id: int) -> HttpResponse:
                'post': post, }
     return render(request, 'posts/post_create.html', context)
 
-@login_required
-def add_comment(request: HttpRequest, post_id: int) -> HttpResponse:
-    form = CommentForm(request.POST or None)
-    if form is valid():
-        comment = form.save(commit=False)
-        comment.author = request.user
-        comment.post = post
-        comment.save()
-    return redirect('posts:post_detail', post_id=post_id)
+# @login_required
+# def add_comment(request: HttpRequest, post_id: int) -> HttpResponse:
+    # form = CommentForm(request.POST or None)
+    # if form is valid():
+    # return redirect('posts:post_detail', post_id=post_id)
