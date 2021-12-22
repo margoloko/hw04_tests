@@ -1,4 +1,5 @@
 from django.test import Client, TestCase
+from http import HTTPStatus
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -40,31 +41,36 @@ class PostFormTests(TestCase):
             reverse('posts:post_create'),
             data=form_data,
             follow=True)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         # Проверяем, сработал ли редирект
         self.assertRedirects(response, reverse('posts:profile', kwargs={
-            'username': 'NoName'}))
-        self.assertEqual(response.status_code, 200)
-# Проверяем, увеличилось ли число постов
+            'username': 'NoName'}))        
+        # Проверяем, увеличилось ли число постов
         self.assertEqual(Post.objects.count(), post_count + 1)
+        self.assertTrue(Post.objects.filter(
+                        text='Тестовый текст',
+                        group=PostFormTests.group.pk,
+                        author=self.user.pk).exists())
 
     def test_edit_post(self):
         """Валидная форма изменяет пост."""
-# Подсчитаем количество постов в Post
+        # Подсчитаем количество постов в Post
         post_count = Post.objects.count()
-        form_data = {'text': 'Измененный текст'}
+        form_data = {'group': PostFormTests.group.pk,
+                     'text': 'Измененный текст'}
         # Отправляем POST-запрос
         response = self.author_client.post(
             reverse('posts:post_edit', kwargs={
                     'post_id': PostFormTests.post.pk}),
             data=form_data,
             follow=True)
-# Проверяем, что произошло изменение поста
-        self.assertTrue(
-            Post.objects.filter(
-                text='Измененный текст').exists())
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        # Проверяем, что произошло изменение поста
+        self.assertTrue(Post.objects.filter(
+                        text='Измененный текст',                       
+                        group=PostFormTests.group.pk).exists())
         # Проверяем, сработал ли редирект
         self.assertRedirects(response, reverse('posts:post_detail',
                              kwargs={'post_id': PostFormTests.post.pk}))
-# Проверяем, число постов осталось прежним
-        self.assertEqual(Post.objects.count(), post_count)
-        self.assertEqual(response.status_code, 200)
+        # Проверяем, число постов осталось прежним
+        self.assertEqual(Post.objects.count(), post_count)        

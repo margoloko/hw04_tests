@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from http import HTTPStatus
 from django.contrib.auth import get_user_model
 
 from .test_models import Post, Group
@@ -40,22 +41,22 @@ class StaticURLTests(TestCase):
         for adress in template_urls:
             with self.subTest(adress=adress):
                 response = self.guest_client.get(adress)
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_unexisting_page_url_exists_at_desired_location(self):
         """Страница unexisting_page/ вернёт ошибку 404."""
         response = self.guest_client.get('/unexisting_page/')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_create_url_exists_at_desired_location_authorized(self):
         """Страница create/ доступна авторизованному пользователю."""
         response = self.authorized_client.get('/create/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_edit_url_exists_at_desired_location_author(self):
         """Страница posts/edit/ доступна автору."""
         response = StaticURLTests.author_client.get('/posts/1/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_urls_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""

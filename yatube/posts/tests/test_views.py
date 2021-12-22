@@ -105,7 +105,7 @@ class PageTests(TestCase):
         self.assertEqual(response.context['group'].description,
                          'Тестовое описание')
         self.assertEqual(response.context['group'].slug, 'test-slug')
-        first_object = response.context['posts'][0]
+        first_object = response.context['page_obj'][0]
         self.assertEqual(first_object.text, 'Тестовая запись')
         self.assertEqual(first_object.author.username, 'auth')
 
@@ -124,7 +124,7 @@ class PageTests(TestCase):
         posts = response.context['author']
         self.assertEqual(posts, self.post.author)
         self.assertEqual(response.context['post_count'], 11)
-        first_object = response.context['posts'][0]
+        first_object = response.context['page_obj'][0]
         self.assertEqual(first_object.text, 'Тестовая запись')
         self.assertEqual(first_object.group.title, 'Тестовая группа')
 
