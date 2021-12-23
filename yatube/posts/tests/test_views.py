@@ -115,7 +115,7 @@ class PageTests(TestCase):
 
     def test_post_create_show_correct_context(self):
         """Шаблон post_create сформирован с правильным полями."""
-        return self.correct_fields(POST_CREATE_URL)
+        self.correct_fields(POST_CREATE_URL)
 
     def test_post_edit_show_correct_context(self):
         """Шаблон post_edit сформирован с правильным полями."""
@@ -124,11 +124,11 @@ class PageTests(TestCase):
         self.assertEqual(response.context['post'].group.title,
                          'Тестовая группа')
         self.assertEqual(response.context['post'].author.username, 'auth')
-        return self.correct_fields(POST_EDIT_URL)
+        self.correct_fields(POST_EDIT_URL)
 
     def test_index_page_show_correct_context(self):
         """Шаблон index сформирован с правильным контекстом."""
-        return self.correct_context(INDEX_URL)
+        self.correct_context(INDEX_URL)
 
     def test_group_list_page_show_correct_context(self):
         """Шаблон group_list сформирован с правильным контекстом."""
@@ -136,7 +136,7 @@ class PageTests(TestCase):
         self.assertEqual(response.context['group'].description,
                          'Тестовое описание')
         self.assertEqual(response.context['group'].slug, 'test-slug')
-        return self.correct_context(GROUP_LIST_URL)
+        self.correct_context(GROUP_LIST_URL)
 
     def test_post_detail_page_show_correct_context(self):
         """Шаблон post_detail сформирован с правильным контекстом."""
@@ -149,7 +149,7 @@ class PageTests(TestCase):
         """Шаблон profile сформирован с правильным контекстом."""
         response = self.author_client.get(PROFILE_URL)
         self.assertEqual(response.context['post_count'], 1)
-        return self.correct_context(PROFILE_URL)
+        self.correct_context(PROFILE_URL)
 
     def test_group_page_show_incorrect_context(self):
         """Проверка, что пост не попал в группу,

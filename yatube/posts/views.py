@@ -98,9 +98,3 @@ def post_edit(request: HttpRequest, post_id: int) -> HttpResponse:
                'post_id': post_id,
                'post': post, }
     return render(request, 'posts/post_create.html', context)
-
-# @login_required
-# def add_comment(request: HttpRequest, post_id: int) -> HttpResponse:
-    # form = CommentForm(request.POST or None)
-    # if form is valid():
-    # return redirect('posts:post_detail', post_id=post_id)

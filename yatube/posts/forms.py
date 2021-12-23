@@ -14,10 +14,3 @@ class PostForm(forms.ModelForm):
         help_texts = {'text': 'Введите текст',
                       'group': 'выберете из существующих',
                       }
-
-
-# class CommentForm(forms.ModelForm):
-#    """Форма для создания комментария."""
-#    class Meta:
-#        model = Comment
-#        fields = "__all__"
