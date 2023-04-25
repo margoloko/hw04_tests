@@ -14,3 +14,6 @@
 ### Стэк
 - Python
 - Unittest
+
+### Автор 
+[Балахонова Марина](https://github.com/margoloko)
